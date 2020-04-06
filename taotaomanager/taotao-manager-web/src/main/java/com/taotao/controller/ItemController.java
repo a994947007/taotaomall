@@ -1,6 +1,7 @@
 package com.taotao.controller;
 
 import com.taotao.bean.ItemDesc;
+import com.taotao.bean.ItemParamItem;
 import com.taotao.common.bean.EasyUIDataGridResult;
 import com.taotao.bean.Item;
 import com.taotao.common.bean.TaotaoResult;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
@@ -32,12 +34,14 @@ public class ItemController {
         return itemService.getItemList(page,rows);
     }
 
-    @RequestMapping("/save")
+    @RequestMapping(value = "/save",method = RequestMethod.POST)
     @ResponseBody
-    public TaotaoResult addItem(Item item,String desc){
+    public TaotaoResult addItem(Item item,String desc,String itemParams){
         ItemDesc itemDesc = new ItemDesc();
         itemDesc.setItemDesc(desc);
-        TaotaoResult taotaoResult = itemService.addItem(item, itemDesc);
+        ItemParamItem itemParamItem = new ItemParamItem();
+        itemParamItem.setParamData(itemParams);
+        TaotaoResult taotaoResult = itemService.addItem(item, itemDesc,itemParamItem);
         return taotaoResult;
     }
 }

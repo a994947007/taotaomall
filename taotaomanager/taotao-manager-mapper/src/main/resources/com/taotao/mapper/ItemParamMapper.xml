@@ -20,6 +20,9 @@
     -->
     <result column="param_data" property="paramData" jdbcType="LONGVARCHAR" />
   </resultMap>
+  <resultMap id="ResultMapWithCatName" type="com.taotao.bean.ItemParamWithCatName" extends="ResultMapWithBLOBs">
+    <result column="item_cat_name" property="itemCatName" jdbcType="VARCHAR"/>
+  </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
       WARNING - @mbggenerated
@@ -121,10 +124,33 @@
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
   </select>
+
+  <select id="selectItemParamWithNameByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithCatName">
+    select
+    t1.id,t1.item_cat_id,t1.param_data,t1.created,t1.updated,t2.name item_cat_name
+    from tb_item_param t1 left join tb_item_cat t2
+    on t1.item_cat_id = t2.id
+    <where>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectParamAndCatNameByPrimaryKey" parameterType="java.lang.Long" resultType="java.util.HashMap">
+    select
+    t1.id,t1.item_cat_id,t1.param_data,t1.created,t1.updated,t2.name item_cat_name
+    from tb_item_param t1 left join tb_item_cat t2
+    on t1.item_cat_id = t2.id
+    <where>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT}
+      </if>
+    </where>
+  </select>
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.taotao.bean.ItemParamExample" >
     <!--
       WARNING - @mbggenerated
@@ -230,6 +256,7 @@
       </if>
     </trim>
   </insert>
+
   <select id="countByExample" parameterType="com.taotao.bean.ItemParamExample" resultType="java.lang.Integer" >
     <!--
       WARNING - @mbggenerated
