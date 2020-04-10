@@ -6,6 +6,7 @@ import com.taotao.mapper.ItemCatMapper;
 import com.taotao.rest.bean.CatNode;
 import com.taotao.rest.bean.CatResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,12 +21,12 @@ public class ItemCatServiceImpl implements ItemCatService{
     @Override
     public CatResult getItemCatList() {
         CatResult catResult = new CatResult();
-        List<?> list = getListByParantId(0);
+        List<?> list = getListByParentId(0);
         catResult.setData(list);
         return catResult;
     }
 
-    public List<?> getListByParantId(long parentId){
+    public List<?> getListByParentId(long parentId){
         List list = new ArrayList<>();
         ItemCatExample example = new ItemCatExample();
         ItemCatExample.Criteria criteria = example.createCriteria();
@@ -40,7 +41,7 @@ public class ItemCatServiceImpl implements ItemCatService{
                 }else{
                     name = itemCat.getName();
                 }
-                List<?> items = getListByParantId(itemCat.getId());
+                List<?> items = getListByParentId(itemCat.getId());
                 list.add(new CatNode(name,url,items));
             }else{
                 list.add("/products/" + itemCat.getId() + ".html|" + itemCat.getName());
